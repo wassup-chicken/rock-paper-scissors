@@ -1,0 +1,19 @@
+
+h1 {
+    text-align: center;
+}
+
+.body {
+    display: flex;
+    gap: 16px;
+    justify-content: space-evenly;
+}
+
+.ex {
+    border: solid aqua 2px;
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    align-content: center;
+}
+
