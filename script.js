@@ -1,3 +1,5 @@
+const userSelection = document.querySelectorAll('button');
+
 const getComputerChoice = () => {
     let cRps = Math.floor(Math.random() * 3) + 1;
 
@@ -15,17 +17,23 @@ const getComputerChoice = () => {
     }
     return comp;
 }
-const computerSelection = getComputerChoice();
 
 let userPoint = 0;
 let computerPoint = 0;
 
-const playRound = (playerSelection, computerSelection) => {
-    if (playerSelection !== 'rock' && playerSelection !== 'paper' && playerSelection !== 'scissors') {
-        alert('Invalid Response, please choose Rock, Paper, or Scissors');
-        game();
-    }
+userSelection.forEach((select) => {
+    select.addEventListener('click', (e) => {
+        console.log(userPoint);
+        if (userPoint >= 5 || computerPoint >= 5) return;
+        const user = e.target.dataset.key;
+        const computerSelection = getComputerChoice();
+        game(user, computerSelection);
+    });
+});
 
+
+
+const playRound = (playerSelection, computerSelection) => {
     let log;
     switch (playerSelection) {
         
@@ -49,33 +57,48 @@ const playRound = (playerSelection, computerSelection) => {
     return log;
 }
 
-const game = () => {
-    const userResponse = prompt('RPS?');
+const game = (userRepsponse, computerSelection) => {
+    let wl = playRound(userRepsponse, computerSelection);
 
-    const userSelection = userResponse.toLowerCase();
+    const container = document.querySelector('.results');
 
-    let wl = playRound(userSelection, computerSelection);
+    const content = document.createElement('div');
+    content.classList.add('content');
+    content.textContent = '';
 
     if (wl === 'w') {
         userPoint++;
-        alert(`Winner! You get +1 point. You: ${userPoint} Machine: ${computerPoint}`)
+        console.log(`Winner! You get +1 point. You: ${userPoint} Machine: ${computerPoint}`);
+        content.textContent += `Winner! You get +1 point. You: ${userPoint} Machine: ${computerPoint}`
+        container.appendChild(content);
     } else if (wl === 'l') {
         computerPoint++;
-        alert(`Loser! Machine gets +1 point. You: ${userPoint} Machine: ${computerPoint}`)
+        console.log(`Loser! Machine gets +1 point. You: ${userPoint} Machine: ${computerPoint}`);
+        content.textContent += `Loser! Machine gets +1 point. You: ${userPoint} Machine: ${computerPoint}`
+        container.appendChild(content);
+
     } else if (wl === 't') {
-        alert(`Tie Game! You don't get any points. You: ${userPoint} Machine: ${computerPoint}`);
+        console.log(`Tie Game! You don't get any points. You: ${userPoint} Machine: ${computerPoint}`);
+        content.textContent += `Tie Game! You don't get any points. You: ${userPoint} Machine: ${computerPoint}`
+        container.appendChild(content);
     }
+
+    const all = document.querySelectorAll('.results > .content');
 
     if (userPoint >= 5) {
-        alert(`You're the final winner!`);
+        alert('You are the final winner!');
+        all.forEach(e => {
+            e.remove()
+        });
+        userPoint = 0;
+        computerPoint = 0;
     } else if (computerPoint >= 5) {
-        alert(`Machine is the final winner!`);
+        alert('Machine is the final winner!');
+        all.forEach(e => {
+            e.remove()
+        });
+        userPoint = 0;
+        computerPoint = 0;
     }
+    
 }
-
-
-while (userPoint < 5 && computerPoint < 5) {
-    game();
-}
-
-
